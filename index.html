@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Titicaca Kawsay — Helados artesanales de frutos nativos del altiplano puneño. Más que un helado, es nuestra tierra." />
+  <title>Titicaca Kawsay | Helados artesanales del altiplano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #d4a017;
+      --gold-light: #f0c14b;
+      --navy: #0c2340;
+      --navy-mid: #1a3a5c;
+      --turquoise: #1a9cb0;
+      --turquoise-light: #e8f7fa;
+      --red-fruit: #c0392b;
+      --cream: #fdf8f0;
+      --white: #ffffff;
+      --text: #2c3e50;
+      --text-light: #5a6a7a;
+      --shadow: 0 10px 40px rgba(12, 35, 64, 0.12);
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      width: min(1140px, 92%);
+      margin: 0 auto;
+    }
+
+    /* ========== NAV ========== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo img {
+      height: 56px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      color: var(--turquoise);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--navy);
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--turquoise); }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.25s;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--turquoise), #0d7a8a);
+      color: white;
+      box-shadow: 0 4px 15px rgba(26, 156, 176, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 156, 176, 0.45);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #b8860b);
+      color: white;
+      box-shadow: 0 4px 15px rgba(212, 160, 23, 0.35);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 160, 23, 0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+    }
+
+    .btn-outline:hover {
+      background: var(--navy);
+      color: white;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      background: linear-gradient(160deg, #0c2340 0%, #1a3a5c 40%, #1a9cb0 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('images/image9.jpg') center/cover no-repeat;
+      opacity: 0.25;
+      mix-blend-mode: luminosity;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      padding: 3rem 0 4rem;
+    }
+
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero-text h1 span {
+      color: var(--gold-light);
+    }
+
+    .hero-text .tagline {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    .hero-text .price-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      padding: 0.5rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero-img {
+      position: relative;
+    }
+
+    .hero-img img {
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      width: 100%;
+      object-fit: cover;
+      max-height: 480px;
+    }
+
+    .hero-img .floating-badge {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      color: var(--navy);
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+
+    /* ========== SECTIONS ========== */
+    section {
+      padding: 5rem 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header .eyebrow {
+      display: inline-block;
+      color: var(--turquoise);
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header p {
+      color: var(--text-light);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ========== ABOUT ========== */
+    .about {
+      background: white;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .about-img img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+
+    .about-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+
+    .about-text p {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: var(--turquoise-light);
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--turquoise);
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+
+    .feature span {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    /* ========== PRODUCTS ========== */
+    .products {
+      background: linear-gradient(180deg, var(--cream) 0%, #f0f7fa 100%);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(12, 35, 64, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(12, 35, 64, 0.14);
+    }
+
+    .product-card .img-wrap {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: #f5f0e8;
+    }
+
+    .product-card .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+
+    .product-card:hover .img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .product-info {
+      padding: 1.25rem 1.35rem 1.5rem;
+    }
+
+    .product-info h3 {
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+
+    .product-info .scientific {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-info p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 0.85rem;
+      min-height: 2.6em;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--turquoise);
+    }
+
+    .product-kcal {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      background: var(--cream);
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    /* ========== COMBO BANNER ========== */
+    .combos {
+      background: var(--navy);
+      color: white;
+      padding: 3.5rem 0;
+    }
+
+    .combos-inner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .combo-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-align: center;
+      transition: background 0.25s;
+    }
+
+    .combo-card:hover {
+      background: rgba(255,255,255,0.14);
+    }
+
+    .combo-card .icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .combo-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+      color: var(--gold-light);
+    }
+
+    .combo-card p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 0.75rem;
+    }
+
+    .combo-card .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* ========== LOCATIONS ========== */
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .location-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .location-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .location-card .body {
+      padding: 1.5rem;
+    }
+
+    .location-card h3 {
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+
+    .location-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .location-card .hours {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--turquoise);
+      font-weight: 500;
+    }
+
+    /* ========== CLUB ========== */
+    .club {
+      background: linear-gradient(135deg, var(--navy) 0%, #0a4a5c 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .club::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212,160,23,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .club-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .club-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      margin-bottom: 1rem;
+    }
+
+    .club-text p {
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .levels {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .level {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1.1rem 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .level-num {
+      width: 48px;
+      height: 48px;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .level strong {
+      display: block;
+      color: var(--gold-light);
+    }
+
+    .level span {
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    .club-img img {
+      border-radius: var(--radius);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      width: 100%;
+    }
+
+    /* ========== ORIGIN ========== */
+    .origin {
+      background: white;
+    }
+
+    .origin-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .origin-img img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+
+    .origin-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+
+    .origin-text p {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .communities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .communities span {
+      background: var(--turquoise-light);
+      color: var(--navy);
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* ========== CTA ========== */
+    .cta {
+      background: linear-gradient(135deg, var(--turquoise) 0%, #0d7a8a 100%);
+      color: white;
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .cta p {
+      opacity: 0.95;
+      margin-bottom: 1.75rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta .btn-gold {
+      font-size: 1rem;
+      padding: 0.9rem 2rem;
+    }
+
+    /* ========== FAQ ========== */
+    .faq {
+      background: var(--cream);
+    }
+
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      padding: 1.15rem 1.4rem;
+      font-weight: 600;
+      color: var(--navy);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.3rem;
+      color: var(--turquoise);
+      font-weight: 400;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      padding: 0 1.4rem 1.25rem;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.85);
+      padding: 3.5rem 0 1.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-brand img {
+      height: 64px;
+      margin-bottom: 1rem;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      max-width: 260px;
+    }
+
+    .footer-col h4 {
+      color: var(--gold-light);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .footer-col a:hover {
+      opacity: 1;
+      color: var(--gold-light);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* ========== WHATSAPP FLOAT ========== */
+    .wa-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+      transition: transform 0.25s;
+    }
+
+    .wa-float:hover {
+      transform: scale(1.08);
+    }
+
+    .wa-float svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        gap: 1rem;
+      }
+      .hero-content,
+      .about-grid,
+      .club-content,
+      .origin-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-img { order: -1; }
+      .combos-inner { grid-template-columns: 1fr; }
+      .locations-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .features { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header id="header">
+    <div class="container nav">
+      <a href="#" class="logo">
+        <img src="images/image1.png" alt="Titicaca Kawsay logo" />
+        <div class="logo-text">
+          Titicaca Kawsay
+          <span>S.A.C.</span>
+        </div>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menú">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#productos">Sabores</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#puntos">Dónde comprar</a></li>
+        <li><a href="#club">Club Kawsay</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://wa.me/51914796199" target="_blank" class="btn btn-primary">Pedir por WhatsApp</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Más que un helado,<br /><span>es nuestra tierra</span></h1>
+        <p class="tagline">
+          Paletas artesanales a base de agua, elaboradas con frutos nativos del altiplano puneño. Sin lactosa, sin gluten y con sabor auténtico.
+        </p>
+        <div class="price-badge">Desde S/ 1.00 · 7 sabores andinos</div>
+        <div class="hero-actions">
+          <a href="#productos" class="btn btn-gold">Ver sabores</a>
+          <a href="https://wa.me/51914796199?text=Hola%2C%20quiero%20pedir%20paletas%20Titicaca%20Kawsay" target="_blank" class="btn btn-outline" style="border-color:white;color:white;">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="hero-img">
+        <img src="images/image9.jpg" alt="Los 7 sabores de Titicaca Kawsay frente al lago Titicaca" />
+        <div class="floating-badge">7 sabores · Origen altiplano</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="nosotros">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Nuestra historia</span>
+        <h2>Del altiplano a tu mano</h2>
+        <p>Transformamos frutos nativos en paletas artesanales que revalorizan la biodiversidad y el trabajo de las comunidades recolectoras.</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-img">
+          <img src="images/image11.jpg" alt="Local de Titicaca Kawsay en Desaguadero, Puno" />
+        </div>
+        <div class="about-text">
+          <h3>Titicaca Kawsay nace en Desaguadero</h3>
+          <p>
+            En la ciudad binacional de Desaguadero, a orillas del lago Titicaca, unimos el nombre del lago con la palabra quechua <em>kawsay</em> (vida) para dar nueva vida a los frutos del altiplano.
+          </p>
+          <p>
+            Compramos directamente a comunidades de Zepita, Yunguyo, Pomata, Juli y Sandia. Elaboramos con procesos de inocuidad y cadena de frío, y vendemos a precio popular para que todos puedan disfrutarlos.
+          </p>
+          <div class="features">
+            <div class="feature">
+              <div class="feature-icon">🌱</div>
+              <div>
+                <strong>100% natural</strong>
+                <span>Pulpa real, sin colorantes</span>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🚫</div>
+              <div>
+                <strong>Sin lactosa ni gluten</strong>
+                <span>A base de agua y miel</span>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🤝</div>
+              <div>
+                <strong>Comercio justo</strong>
+                <span>Compra directa a comunidades</span>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">❄</div>
+              <div>
+                <strong>Cadena de frío</strong>
+                <span>Calidad e inocuidad garantizada</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="productos">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Nuestros sabores</span>
+        <h2>Siete frutos del altiplano</h2>
+        <p>Cada paleta de ~80 g está elaborada con pulpa real, agua, azúcar rubia y miel de abeja.</p>
+      </div>
+      <div class="products-grid">
+        <!-- Sanky -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image2.jpg" alt="Paleta de sanky" />
+          </div>
+          <div class="product-info">
+            <h3>Sanky</h3>
+            <div class="scientific">Corryocactus brevistylus</div>
+            <p>Fruto nativo del altiplano. Sabor único y refrescante.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.00</span>
+              <span class="product-kcal">85 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Aguaymanto -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image3.jpg" alt="Paleta de aguaymanto" />
+          </div>
+          <div class="product-info">
+            <h3>Aguaymanto</h3>
+            <div class="scientific">Physalis peruviana</div>
+            <p>Rico en antioxidantes y vitamina C. Dulce y ligeramente ácido.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.50</span>
+              <span class="product-kcal">90 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Tuna -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image4.jpg" alt="Paleta de tuna" />
+          </div>
+          <div class="product-info">
+            <h3>Tuna</h3>
+            <div class="scientific">Opuntia ficus-indica</div>
+            <p>Apoya la regulación de la glucosa. Sabor suave y natural.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.00</span>
+              <span class="product-kcal">80 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Saúco -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image5.jpg" alt="Paleta de saúco" />
+          </div>
+          <div class="product-info">
+            <h3>Saúco</h3>
+            <div class="scientific">Sambucus peruviana</div>
+            <p>Antiinflamatorio natural. Color intenso y sabor profundo.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.00</span>
+              <span class="product-kcal">82 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Capulí -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image6.jpg" alt="Paleta de capulí" />
+          </div>
+          <div class="product-info">
+            <h3>Capulí</h3>
+            <div class="scientific">Prunus serotina</div>
+            <p>Antioxidante y digestivo. Notas afrutadas y suaves.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.50</span>
+              <span class="product-kcal">88 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Papayuela -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image7.jpg" alt="Paleta de papayuela" />
+          </div>
+          <div class="product-info">
+            <h3>Papayuela</h3>
+            <div class="scientific">Vasconcellea pubescens</div>
+            <p>Digestivo natural. Textura cremosa y sabor tropical andino.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.00</span>
+              <span class="product-kcal">78 kcal</span>
+            </div>
+          </div>
+        </article>
+        <!-- Granadilla -->
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="images/image8.jpg" alt="Paleta de granadilla de monte" />
+          </div>
+          <div class="product-info">
+            <h3>Granadilla de monte</h3>
+            <div class="scientific">Passiflora ligularis</div>
+            <p>Relajante natural. Dulzura equilibrada y semillas crujientes.</p>
+            <div class="product-meta">
+              <span class="product-price">S/ 1.50</span>
+              <span class="product-kcal">86 kcal</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMBOS -->
+  <section class="combos">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 2rem;">
+        <span class="eyebrow" style="color: var(--gold-light);">Promociones</span>
+        <h2 style="color: white;">Combos y ofertas</h2>
+      </div>
+      <div class="combos-inner">
+        <div class="combo-card">
+          <div class="icon">🍦</div>
+          <h3>Combo Andino</h3>
+          <p>3 paletas surtidas a tu elección</p>
+          <div class="price">S/ 3.30</div>
+        </div>
+        <div class="combo-card">
+          <div class="icon">👨‍👩‍👧‍👦</div>
+          <h3>Combo Familia</h3>
+          <p>6 paletas surtidas para compartir</p>
+          <div class="price">S/ 6.50</div>
+        </div>
+        <div class="combo-card">
+          <div class="icon">🔥</div>
+          <h3>Martes de Sanky</h3>
+          <p>2×1 en paletas de sanky (mientras dure stock)</p>
+          <div class="price">S/ 1.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIONS -->
+  <section id="puntos">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Puntos de venta</span>
+        <h2>Dónde encontrarnos</h2>
+        <p>Tienda, triciclos heladeros y delivery en Desaguadero.</p>
+      </div>
+      <div class="locations-grid">
+        <div class="location-card">
+          <img src="images/image11.jpg" alt="Tienda Titicaca Kawsay" />
+          <div class="body">
+            <h3>Tienda física</h3>
+            <p>Desaguadero, provincia de Chucuito, Puno. Local propio con vitrina exhibidora.</p>
+            <span class="hours">🕐 Lun–Dom · 8:00 – 20:00</span>
+          </div>
+        </div>
+        <div class="location-card">
+          <img src="images/image12.jpg" alt="Triciclo heladero" />
+          <div class="body">
+            <h3>Triciclos heladeros</h3>
+            <p>Plaza Principal de Desaguadero y cruce fronterizo / mercado binacional.</p>
+            <span class="hours">🕐 Lun–Dom · 10:00 – 18:00</span>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 2.5rem;">
+        <p style="color: var(--text-light); margin-bottom: 1rem;">
+          También por <strong>WhatsApp Business</strong> (+51 914 796 199) · Delivery local (pedido mín. S/ 10.00) · 10:00 – 19:00
+        </p>
+        <a href="https://wa.me/51914796199" target="_blank" class="btn btn-primary">Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLUB -->
+  <section class="club" id="club">
+    <div class="container club-content">
+      <div class="club-text">
+        <h2>Club Kawsay</h2>
+        <p>
+          Programa de fidelidad sin tarjeta. Cada compra suma. Regístrate con tu nombre en tienda o por WhatsApp y acumula beneficios.
+        </p>
+        <div class="levels">
+          <div class="level">
+            <div class="level-num">10</div>
+            <div>
+              <strong>Cliente frecuente</strong>
+              <span>1 paleta gratis del sabor que elijas</span>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-num">30</div>
+            <div>
+              <strong>Cliente VIP</strong>
+              <span>10% de descuento permanente + paletas gratis</span>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-num">50</div>
+            <div>
+              <strong>Embajador</strong>
+              <span>15% de descuento + sorpresas de temporada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="club-img">
+        <img src="images/image10.jpg" alt="Empaque y caja de Titicaca Kawsay" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ORIGIN -->
+  <section class="origin">
+    <div class="container origin-grid">
+      <div class="origin-img">
+        <img src="images/image14.jpg" alt="Comunidades recolectoras del altiplano" />
+      </div>
+      <div class="origin-text">
+        <h3>Trabajamos con las comunidades</h3>
+        <p>
+          Compramos los frutos directamente a recolectores de la zona lacustre y de la ceja de selva puneña, sin intermediarios. Así garantizamos un precio justo para el productor y trazabilidad para el consumidor.
+        </p>
+        <p>
+          Zepita, Yunguyo, Pomata y Juli abastecen sanky, tuna, aguaymanto, saúco y capulí. Sandia aporta papayuela y granadilla de monte.
+        </p>
+        <div class="communities">
+          <span>Zepita</span>
+          <span>Yunguyo</span>
+          <span>Pomata</span>
+          <span>Juli</span>
+          <span>Sandia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>¿Listo para probar el sabor del altiplano?</h2>
+      <p>Pide por WhatsApp, pasa por la tienda o encuentra nuestros triciclos en la plaza y en la frontera.</p>
+      <a href="https://wa.me/51914796199?text=Hola%2C%20quiero%20conocer%20los%20sabores%20de%20Titicaca%20Kawsay" target="_blank" class="btn btn-gold">
+        📱 Pedir por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Todo lo que necesitas saber</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>¿Qué diferencia a Titicaca Kawsay de otros helados?</summary>
+          <p>Son paletas artesanales a base de agua, sin lactosa ni gluten, elaboradas con pulpa real de frutos nativos del altiplano. No usamos colorantes ni saborizantes artificiales. Además, compramos directamente a comunidades recolectoras.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Dónde puedo comprar?</summary>
+          <p>En la tienda de Desaguadero (8:00–20:00), en los triciclos de la Plaza Principal y del cruce fronterizo (10:00–18:00), o por WhatsApp (+51 914 796 199) con delivery local (pedido mín. S/ 10).</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Son veganos?</summary>
+          <p>No. Se endulzan con miel de abeja y azúcar rubia. No contienen lactosa ni gluten. Si eres alérgico a la miel o al polen, consulta antes de consumir.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Venden al por mayor?</summary>
+          <p>Sí. Atendemos kioscos, tiendas, restaurantes y comerciantes de la zona. Escríbenos por WhatsApp o al correo titicacakawsay@gmail.com para la lista de precios.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Tienen registro sanitario?</summary>
+          <p>Estamos en proceso de obtener el Registro Sanitario ante DIGESA, con Buenas Prácticas de Manufactura y análisis microbiológicos por laboratorio acreditado por INACAL.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo unirme al Club Kawsay?</summary>
+          <p>Solo compra en tienda o por WhatsApp: cada compra suma. A las 10 compras ganas una paleta gratis; a las 30, nivel VIP (10% dto.); a las 50, Embajador (15% dto. y sorpresas).</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="images/image1.png" alt="Titicaca Kawsay" />
+          <p>Helados artesanales de frutos nativos del altiplano puneño. Más que un helado, es nuestra tierra.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#productos">Sabores</a></li>
+            <li><a href="#club">Club Kawsay</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="https://wa.me/51914796199" target="_blank">WhatsApp +51 914 796 199</a></li>
+            <li><a href="mailto:titicacakawsay@gmail.com">titicacakawsay@gmail.com</a></li>
+            <li>Desaguadero, Chucuito, Puno</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li>Libro de Reclamaciones</li>
+            <li>Política de Privacidad</li>
+            <li>RUC 20999999995 (ref.)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Titicaca Kawsay S.A.C. Todos los derechos reservados.</span>
+        <span>Desaguadero · Puno · Perú</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp float -->
+  <a href="https://wa.me/51914796199" class="wa-float" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16.004c0 2.824.736 5.582 2.136 8.01L.668 30.668l6.824-1.79A15.94 15.94 0 0016.004 32C24.826 32 32 24.822 32 15.996 32 7.176 24.826 0 16.004 0zm9.312 22.612c-.388 1.096-2.266 2.01-3.162 2.14-.82.118-1.86.168-3.004-.188-1.09-.336-2.492-.786-4.278-1.72-6.458-3.342-10.66-10.97-10.984-11.48-.314-.51-2.586-3.44-2.586-6.56 0-3.12 1.636-4.652 2.216-5.288.58-.636 1.264-.796 1.686-.796.422 0 .844.004 1.214.022.39.018.912-.148 1.424 1.086.522 1.252 1.774 4.33 1.93 4.646.156.316.26.686.052 1.106-.2.41-.3.666-.59.992-.29.326-.61.728-.87 1.022-.28.316-.57.656-.244 1.286.326.63 1.45 2.392 3.112 3.874 2.138 1.906 3.94 2.498 4.5 2.78.56.282.886.236 1.212-.142.336-.39 1.44-1.68 1.824-2.256.384-.576.768-.48 1.296-.288.534.19 3.392 1.6 3.974 1.892.582.292.97.438 1.112.682.142.244.142 1.416-.246 2.512z"/>
+    </svg>
+  </a>
+
+  <script>
+    // Sticky header
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile menu
+    const toggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  </script>
+</body>
+</html>
