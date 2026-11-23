@@ -1231,6 +1231,117 @@ footer h4{color:#fff;font-size:1rem;margin-bottom:18px;font-weight:600}
   .brand-text .b1{font-size:1.05rem}
 }
 </style>
+
+<!-- ===== DASHBOARD FINANCIERO: Chart.js + estilos ===== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+/* Dashboard financiero - estilos andinos */
+:root{
+  --dk-purple:#6B2D5C;--dk-purple2:#4A1F3F;--dk-orange:#D97706;--dk-orange2:#B36B00;
+  --dk-green:#0E7B4F;--dk-blue:#0891B2;--dk-violet:#7C3AED;--dk-pink:#DB2777;
+  --dk-bg:#FFF8F0;--dk-ink:#1F2937;--dk-mute:#6B7280;--dk-line:#E5E7EB;
+  --dk-ok:#10B981;--dk-bad:#EF4444;
+  --dk-r:16px;
+  --dk-disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --dk-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --dk-sh:0 1px 3px rgba(31,41,55,.06),0 10px 30px -10px rgba(31,41,55,.18);
+}
+.dash-section{background:var(--dk-bg);padding:60px 0;font-family:var(--dk-sans);color:var(--dk-ink)}
+.dash-wrap{width:min(1400px,100% - 32px);margin:0 auto}
+.dash-header{text-align:center;margin-bottom:30px}
+.dash-header h2{font-family:var(--dk-disp);font-size:clamp(36px,5vw,56px);font-weight:800;font-style:italic;color:var(--dk-purple);text-transform:uppercase;margin:0 0 8px}
+.dash-header h2 span{color:var(--dk-orange)}
+.dash-header p{font-size:16px;color:var(--dk-mute);max-width:50em;margin:0 auto}
+
+/* Filtros */
+.dash-filters{background:#fff;border-radius:var(--dk-r);padding:16px 20px;box-shadow:var(--dk-sh);display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:24px;border-top:3px solid var(--dk-purple)}
+.dash-filters label{font:700 11px var(--dk-sans);text-transform:uppercase;letter-spacing:.06em;color:var(--dk-mute);display:block;margin-bottom:4px}
+.dash-filters select{font:600 14px var(--dk-sans);padding:8px 32px 8px 12px;border:2px solid var(--dk-line);border-radius:8px;background:#fff;appearance:none;cursor:pointer;color:var(--dk-ink);transition:.2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%236B2D5C' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:130px}
+.dash-filters select:hover{border-color:var(--dk-purple)}
+.dash-filters select:focus{outline:0;border-color:var(--dk-orange)}
+.dash-filter-group{display:flex;flex-direction:column}
+.dash-btn-clear{background:#F3F4F8;border:2px solid var(--dk-line);color:var(--dk-ink);padding:8px 18px;border-radius:8px;font:700 13px var(--dk-sans);cursor:pointer;transition:.2s}
+.dash-btn-clear:hover{background:var(--dk-line)}
+.dash-records{margin-left:auto;font:600 13px var(--dk-sans);color:var(--dk-mute)}
+.dash-records b{color:var(--dk-purple)}
+
+/* KPI cards */
+.dash-section-title{font:800 14px var(--dk-sans);text-transform:uppercase;letter-spacing:.06em;color:var(--dk-mute);margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.dash-section-title::before{content:"";width:4px;height:18px;background:var(--dk-purple);border-radius:2px}
+.dash-section-title.orange::before{background:var(--dk-orange)}
+.dash-section-title.green::before{background:var(--dk-green)}
+.dash-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.dash-kpi{background:#fff;border-radius:var(--dk-r);padding:18px 16px;box-shadow:var(--dk-sh);border-top:4px solid var(--dk-purple);transition:.25s}
+.dash-kpi:hover{transform:translateY(-3px);box-shadow:0 4px 6px rgba(31,41,55,.05),0 20px 50px -12px rgba(31,41,55,.25)}
+.dash-kpi[data-color="orange"]{border-top-color:var(--dk-orange)}
+.dash-kpi[data-color="green"]{border-top-color:var(--dk-green)}
+.dash-kpi[data-color="blue"]{border-top-color:var(--dk-blue)}
+.dash-kpi[data-color="violet"]{border-top-color:var(--dk-violet)}
+.dash-kpi[data-color="pink"]{border-top-color:var(--dk-pink)}
+.dash-kpi-label{font:700 11px var(--dk-sans);text-transform:uppercase;letter-spacing:.05em;color:var(--dk-mute);margin-bottom:6px}
+.dash-kpi-value{font:800 26px var(--dk-disp);color:var(--dk-purple);line-height:1;letter-spacing:-.01em}
+.dash-kpi[data-color="orange"] .dash-kpi-value{color:var(--dk-orange)}
+.dash-kpi[data-color="green"] .dash-kpi-value{color:var(--dk-green)}
+.dash-kpi[data-color="blue"] .dash-kpi-value{color:var(--dk-blue)}
+.dash-kpi[data-color="violet"] .dash-kpi-value{color:var(--dk-violet)}
+.dash-kpi[data-color="pink"] .dash-kpi-value{color:var(--dk-pink)}
+.dash-kpi-sub{font-size:12px;color:var(--dk-mute);margin-top:6px}
+.dash-kpi-sub.ok{color:var(--dk-ok);font-weight:600}
+.dash-kpi-sub.bad{color:var(--dk-bad);font-weight:600}
+
+/* Charts */
+.dash-chart-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:24px}
+.dash-chart-card{background:#fff;border-radius:var(--dk-r);padding:20px;box-shadow:var(--dk-sh)}
+.dash-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.dash-chart-title{font:700 16px var(--dk-disp);color:var(--dk-ink);text-transform:uppercase;letter-spacing:.02em}
+.dash-chart-badge{font:700 11px var(--dk-sans);background:#F3F4F8;color:var(--dk-mute);padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+.dash-chart-body{position:relative;height:280px}
+
+/* Tabla */
+.dash-table-card{background:#fff;border-radius:var(--dk-r);padding:20px;box-shadow:var(--dk-sh);overflow:hidden;margin-bottom:24px}
+.dash-table-card h3{font:700 18px var(--dk-disp);color:var(--dk-ink);margin-bottom:14px;text-transform:uppercase}
+.dash-data-table{width:100%;border-collapse:collapse;font-size:14px}
+.dash-data-table thead th{background:var(--dk-purple);color:#fff;padding:12px 14px;text-align:left;font:700 12px var(--dk-sans);text-transform:uppercase;letter-spacing:.04em}
+.dash-data-table thead th:first-child{border-radius:8px 0 0 0}
+.dash-data-table thead th:last-child{border-radius:0 8px 0 0}
+.dash-data-table tbody td{padding:10px 14px;border-bottom:1px solid var(--dk-line)}
+.dash-data-table tbody tr:nth-child(even){background:var(--dk-bg)}
+.dash-data-table tbody tr:hover{background:#FEF3C7}
+.dash-data-table .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.dash-data-table .total-row td{background:var(--dk-green);color:#fff;font-weight:800;border-bottom:0}
+.dash-data-table .total-row td:first-child{border-radius:0 0 0 8px}
+.dash-data-table .total-row td:last-child{border-radius:0 0 8px 0}
+
+/* Semáforo */
+.dash-sem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.dash-sem-card{background:#fff;border-radius:var(--dk-r);padding:18px;box-shadow:var(--dk-sh);display:flex;align-items:center;gap:14px;border-left:4px solid var(--dk-ok)}
+.dash-sem-card.bad{border-left-color:var(--dk-bad)}
+.dash-sem-icon{width:48px;height:48px;border-radius:50%;background:#D1FAE5;display:grid;place-items:center;flex-shrink:0}
+.dash-sem-card.bad .dash-sem-icon{background:#FEE2E2}
+.dash-sem-icon svg{width:24px;height:24px;stroke-width:3;fill:none;stroke:var(--dk-ok)}
+.dash-sem-card.bad .dash-sem-icon svg{stroke:var(--dk-bad)}
+.dash-sem-txt b{font:700 15px var(--dk-sans);color:var(--dk-ink);display:block}
+.dash-sem-txt span{font-size:13px;color:var(--dk-mute)}
+
+/* PDF button */
+.dash-btn-pdf{background:var(--dk-orange);color:#fff;border:0;padding:10px 20px;border-radius:999px;font:700 13px var(--dk-sans);cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.dash-btn-pdf:hover{background:var(--dk-orange2);transform:translateY(-1px)}
+.dash-btn-pdf svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+
+/* Responsive */
+@media(max-width:900px){
+  .dash-chart-grid{grid-template-columns:1fr}
+  .dash-filters{flex-direction:column;align-items:stretch}
+  .dash-records{margin-left:0;text-align:center}
+}
+@media(max-width:500px){
+  .dash-kpi-grid{grid-template-columns:1fr 1fr}
+  .dash-kpi-value{font-size:22px}
+  .dash-data-table{font-size:12px}
+  .dash-data-table thead th,.dash-data-table tbody td{padding:8px}
+}
+</style>
+
 </head>
 <body>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}.cart-btn,.wa-float{display:none!important}</style></noscript>
@@ -1264,6 +1375,7 @@ footer h4{color:#fff;font-size:1rem;margin-bottom:18px;font-weight:600}
       <a href="#proceso">Proceso</a>
       <a href="#puntos">Puntos de venta</a>
       <a href="#club">Club Kawsay</a>
+      <a href="#dashboard">Dashboard</a>
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-cta">
@@ -2002,6 +2114,220 @@ footer h4{color:#fff;font-size:1rem;margin-bottom:18px;font-weight:600}
 console.log("%cTiticaca Kawsay","color:#E8A23B;font-weight:bold;font-size:14px","· build v13 · respaldo académico + rueda de la suerte · 2026-10-22");
 </script>
 <!-- ===== FAQ ===== -->
+
+<!-- ===== SECCIÓN DASHBOARD FINANCIERO ===== -->
+<section id="dashboard" class="dash-section">
+  <div class="dash-wrap">
+    <div class="dash-header">
+      <h2>DASHBOARD <span>FINANCIERO</span></h2>
+      <p>Paletas artesanales de frutos nativos del altiplano - Desaguadero, Puno · Modelo de evaluación a 5 años (S/)</p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="dash-filters">
+      <div class="dash-filter-group">
+        <label>Tipo</label>
+        <select id="dk-f-tipo" onchange="dkApplyFilters()">
+          <option value="all">Todos</option>
+          <option value="ingreso">Ingresos</option>
+          <option value="costo">Costos</option>
+          <option value="gasto">Gastos</option>
+        </select>
+      </div>
+      <div class="dash-filter-group">
+        <label>Trimestre</label>
+        <select id="dk-f-trim" onchange="dkApplyFilters()">
+          <option value="all">T1 - T4</option>
+          <option value="T1">T1</option>
+          <option value="T2">T2</option>
+          <option value="T3">T3</option>
+          <option value="T4">T4</option>
+        </select>
+      </div>
+      <div class="dash-filter-group">
+        <label>Categoría</label>
+        <select id="dk-f-cat" onchange="dkApplyFilters()">
+          <option value="all">Todas</option>
+          <option value="valle">Frutos de valle</option>
+          <option value="selva">Frutos de selva</option>
+          <option value="altiplano">Frutos altiplánicos</option>
+          <option value="combos">Combos</option>
+          <option value="institucional">Planes institucionales</option>
+        </select>
+      </div>
+      <div class="dash-filter-group">
+        <label>Escenario</label>
+        <select id="dk-f-esc" onchange="dkApplyScenario()">
+          <option value="base">Base</option>
+          <option value="pesimista">Pesimista</option>
+          <option value="optimista">Optimista</option>
+        </select>
+      </div>
+      <button class="dash-btn-clear" onclick="dkClearFilters()">Limpiar filtros</button>
+      <div class="dash-records">Registros: <b id="dk-rec-count">120</b> ventas</div>
+      <a href="#" class="dash-btn-pdf" onclick="window.print();return false;">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        Exportar PDF
+      </a>
+    </div>
+
+    <!-- KPIs Año 1 -->
+    <div class="dash-section-title">Indicadores financieros clave - Año 1</div>
+    <div class="dash-kpi-grid">
+      <div class="dash-kpi" data-color="purple">
+        <div class="dash-kpi-label">Ingresos Año 1</div>
+        <div class="dash-kpi-value" id="dk-kpi-ing">S/ 41,957</div>
+        <div class="dash-kpi-sub">120 ventas registradas</div>
+      </div>
+      <div class="dash-kpi" data-color="orange">
+        <div class="dash-kpi-label">Costos de producción</div>
+        <div class="dash-kpi-value" id="dk-kpi-costos">S/ 25,174</div>
+        <div class="dash-kpi-sub">60% de ingresos</div>
+      </div>
+      <div class="dash-kpi" data-color="orange">
+        <div class="dash-kpi-label">Gastos operativos</div>
+        <div class="dash-kpi-value" id="dk-kpi-gastos">S/ 9,230</div>
+        <div class="dash-kpi-sub">Admin + ventas</div>
+      </div>
+      <div class="dash-kpi" data-color="green">
+        <div class="dash-kpi-label">Utilidad operativa</div>
+        <div class="dash-kpi-value" id="dk-kpi-utilop">S/ 6,112</div>
+        <div class="dash-kpi-sub" id="dk-kpi-margen">Margen: 14.6%</div>
+      </div>
+      <div class="dash-kpi" data-color="green">
+        <div class="dash-kpi-label">Utilidad neta Año 1</div>
+        <div class="dash-kpi-value" id="dk-kpi-utilneta">S/ 5,501</div>
+        <div class="dash-kpi-sub">Régimen MYPE 10%</div>
+      </div>
+      <div class="dash-kpi" data-color="violet">
+        <div class="dash-kpi-label">Inversión total</div>
+        <div class="dash-kpi-value" id="dk-kpi-inversion">S/ 18,500</div>
+        <div class="dash-kpi-sub">Tangible + intangible + capital</div>
+      </div>
+    </div>
+
+    <!-- KPIs Rentabilidad -->
+    <div class="dash-section-title orange">Indicadores de rentabilidad</div>
+    <div class="dash-kpi-grid">
+      <div class="dash-kpi" data-color="violet">
+        <div class="dash-kpi-label">VAN económico</div>
+        <div class="dash-kpi-value" id="dk-kpi-vane">S/ 12,606</div>
+        <div class="dash-kpi-sub ok">VAN > 0: viable</div>
+      </div>
+      <div class="dash-kpi" data-color="violet">
+        <div class="dash-kpi-label">TIR económica</div>
+        <div class="dash-kpi-value" id="dk-kpi-tire">32.4%</div>
+        <div class="dash-kpi-sub ok">> COK (10%)</div>
+      </div>
+      <div class="dash-kpi" data-color="blue">
+        <div class="dash-kpi-label">VAN financiero</div>
+        <div class="dash-kpi-value" id="dk-kpi-vanf">S/ 12,224</div>
+        <div class="dash-kpi-sub ok">Con préstamo 40%</div>
+      </div>
+      <div class="dash-kpi" data-color="blue">
+        <div class="dash-kpi-label">TIR financiera</div>
+        <div class="dash-kpi-value" id="dk-kpi-tirf">43.7%</div>
+        <div class="dash-kpi-sub ok">> COK (10%)</div>
+      </div>
+      <div class="dash-kpi" data-color="pink">
+        <div class="dash-kpi-label">Relación B/C</div>
+        <div class="dash-kpi-value" id="dk-kpi-bc">0.68</div>
+        <div class="dash-kpi-sub">Beneficio / Costo</div>
+      </div>
+      <div class="dash-kpi" data-color="green">
+        <div class="dash-kpi-label">Recuperación</div>
+        <div class="dash-kpi-value" id="dk-kpi-recup">3.5 años</div>
+        <div class="dash-kpi-sub ok">< 5 años: viable</div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="dash-chart-grid">
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Ingresos por producto (S/)</div>
+          <div class="dash-chart-badge">Año 1</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart1"></canvas></div>
+      </div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Estructura de costos y gastos (S/)</div>
+          <div class="dash-chart-badge">% del total</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart2"></canvas></div>
+      </div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Ingresos por canal y trimestre (S/)</div>
+          <div class="dash-chart-badge">Stacked</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart3"></canvas></div>
+      </div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Top 5 costos de producción (S/)</div>
+          <div class="dash-chart-badge">Ranking</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart4"></canvas></div>
+      </div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Flujo de caja económico vs financiero</div>
+          <div class="dash-chart-badge">5 años (miles S/)</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart5"></canvas></div>
+      </div>
+      <div class="dash-chart-card">
+        <div class="dash-chart-header">
+          <div class="dash-chart-title">Utilidad neta proyectada 5 años (S/)</div>
+          <div class="dash-chart-badge">Proyección</div>
+        </div>
+        <div class="dash-chart-body"><canvas id="dk-chart6"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Tabla líneas de negocio -->
+    <div class="dash-table-card">
+      <h3>Ingresos por línea de negocio - Año 1</h3>
+      <table class="dash-data-table">
+        <thead>
+          <tr>
+            <th>Línea de negocio</th>
+            <th class="num">Cant. mensual</th>
+            <th class="num">Precio (S/)</th>
+            <th class="num">Ingreso mensual</th>
+            <th class="num">Ingreso anual</th>
+            <th class="num">% participación</th>
+          </tr>
+        </thead>
+        <tbody id="dk-lineas-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Semáforo -->
+    <div class="dash-section-title green">Semáforo del proyecto</div>
+    <div class="dash-sem-grid">
+      <div class="dash-sem-card" id="dk-sem1">
+        <div class="dash-sem-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="dash-sem-txt"><b>VAN económico > 0</b><span>S/ 12,606 - Cumple</span></div>
+      </div>
+      <div class="dash-sem-card" id="dk-sem2">
+        <div class="dash-sem-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="dash-sem-txt"><b>TIR económica > COK</b><span>32.4% > 10% - Cumple</span></div>
+      </div>
+      <div class="dash-sem-card bad" id="dk-sem3">
+        <div class="dash-sem-icon"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <div class="dash-sem-txt"><b>Relación B/C > 1</b><span>0.68 - No cumple</span></div>
+      </div>
+      <div class="dash-sem-card bad" id="dk-sem4">
+        <div class="dash-sem-icon"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <div class="dash-sem-txt"><b>Recuperación < 3 años</b><span>3.5 años - No cumple</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec-faq" id="faq">
   <div class="container">
     <div class="sec-head center reveal">
@@ -3105,5 +3431,208 @@ renderCart();
   })();
 })();
 </script>
+
+<!-- ===== DASHBOARD FINANCIERO: JavaScript ===== -->
+<script>
+// Datos reales de TITICACA KAWSAY
+const DK_DATA = {
+  ingresos: 41957, costos: 25174, gastosAdmin: 4510, gastosVenta: 4720,
+  utilidadOperativa: 6112, utilidadNeta: 5501, inversion: 18500,
+  vanEcon: 12606, tirEcon: 32.4, vanFin: 12224, tirFin: 43.7,
+  bc: 0.68, recup: 3.5,
+  productos: [
+    {nombre: 'Aguaymanto', valor: 8211, cat: 'valle'},
+    {nombre: 'Granadilla de monte', valor: 7508, cat: 'selva'},
+    {nombre: 'Capulí', valor: 6770, cat: 'valle'},
+    {nombre: 'Sanky', valor: 5935, cat: 'altiplano'},
+    {nombre: 'Saúco', valor: 4818, cat: 'valle'},
+    {nombre: 'Tuna', valor: 4442, cat: 'altiplano'},
+    {nombre: 'Papayuela', valor: 3828, cat: 'selva'},
+    {nombre: 'Combo Andino', valor: 244, cat: 'combos'},
+    {nombre: 'Combo Familia', valor: 202, cat: 'combos'},
+  ],
+  estructura: [
+    {nombre: 'Mano de obra producción', valor: 10067},
+    {nombre: 'Materia prima (frutos)', valor: 7552},
+    {nombre: 'Insumos y empaques', valor: 5035},
+    {nombre: 'Sueldos vendedores', valor: 12000},
+    {nombre: 'Gastos administrativos', valor: 4510},
+    {nombre: 'Publicidad y redes', valor: 960},
+    {nombre: 'Depreciación', valor: 1440},
+  ],
+  topCostos: [
+    {nombre: 'Mano de obra producción', valor: 10067},
+    {nombre: 'Pulpa frutos de valle', valor: 4531},
+    {nombre: 'Palitos, envoltura y envases', valor: 3776},
+    {nombre: 'Pulpa frutos de selva', valor: 3273},
+    {nombre: 'Pulpa frutos altiplánicos', valor: 2517},
+  ],
+  canales: {
+    labels: ['T1', 'T2', 'T3', 'T4'],
+    datasets: [
+      {label: 'Triciclo heladero', data: [4500, 3800, 4200, 3181], color: '#6B2D5C'},
+      {label: 'App y WhatsApp', data: [3200, 2800, 3500, 1722], color: '#D97706'},
+      {label: 'Tienda propia', data: [2600, 2200, 2800, 1469], color: '#0E7B4F'},
+      {label: 'Delivery', data: [1700, 1500, 1900, 885], color: '#0891B2'},
+    ]
+  },
+  flujo: {
+    labels: ['Año 0', 'Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+    economico: [-18.5, 2.9, 3.3, 3.8, 4.2, 4.6],
+    financiero: [-11.1, 1.8, 2.1, 2.5, 4.2, 4.6],
+  },
+  utilidadNeta5: {
+    labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+    data: [5501, 6140, 6839, 7694, 8440],
+  },
+  lineas: [
+    {nombre: 'Helados de frutos de valle', cant: 1800, precio: 1.30, mensual: 2340, anual: 28080, pct: 38.9},
+    {nombre: 'Helados de frutos de selva', cant: 1050, precio: 1.40, mensual: 1470, anual: 17640, pct: 24.5},
+    {nombre: 'Helados de frutos altiplánicos', cant: 950, precio: 1.25, mensual: 1188, anual: 14256, pct: 19.8},
+    {nombre: 'Combos Andinos', cant: 80, precio: 5.00, mensual: 400, anual: 4800, pct: 6.7},
+    {nombre: 'Planes institucionales', cant: 6, precio: 186.50, mensual: 1119, anual: 13428, pct: 18.6},
+  ],
+  escenarios: {
+    base: {dV: 0, dC: 0, dG: 0},
+    pesimista: {dV: -0.20, dC: 0.10, dG: 0.10},
+    optimista: {dV: 0.15, dC: -0.05, dG: 0},
+  },
+};
+
+const DK_COLORS = ['#6B2D5C','#D97706','#0E7B4F','#0891B2','#7C3AED','#DB2777','#F59E0B','#3B82F6','#EC4899'];
+let dkCharts = {};
+
+function dkInitCharts() {
+  if (typeof Chart === 'undefined') { setTimeout(dkInitCharts, 200); return; }
+  Chart.defaults.font.family = "'Inter', sans-serif";
+  Chart.defaults.color = '#6B7280';
+
+  // Chart 1: Ingresos por producto
+  const d1 = DK_DATA.productos.filter(p => p.valor > 100).sort((a,b) => b.valor - a.valor);
+  dkCharts.c1 = new Chart(document.getElementById('dk-chart1'), {
+    type: 'bar',
+    data: { labels: d1.map(p => p.nombre), datasets: [{ label: 'Ingresos (S/)', data: d1.map(p => p.valor), backgroundColor: d1.map((_, i) => DK_COLORS[i % DK_COLORS.length]), borderRadius: 6 }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => 'S/ ' + c.raw.toLocaleString() } } }, scales: { x: { grid: { color: '#F3F4F6' }, ticks: { callback: (v) => 'S/ ' + v.toLocaleString() } } } }
+  });
+
+  // Chart 2: Estructura de costos (donut)
+  dkCharts.c2 = new Chart(document.getElementById('dk-chart2'), {
+    type: 'doughnut',
+    data: { labels: DK_DATA.estructura.map(e => e.nombre), datasets: [{ data: DK_DATA.estructura.map(e => e.valor), backgroundColor: DK_COLORS, borderWidth: 2, borderColor: '#fff' }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12, padding: 8, font: { size: 11 } } }, tooltip: { callbacks: { label: (c) => { const t = c.dataset.data.reduce((a,b) => a+b, 0); return ' ' + c.label + ': S/ ' + c.raw.toLocaleString() + ' (' + ((c.raw/t*100).toFixed(1)) + '%)'; } } } }, cutout: '55%' }
+  });
+
+  // Chart 3: Ingresos por canal y trimestre (stacked)
+  dkCharts.c3 = new Chart(document.getElementById('dk-chart3'), {
+    type: 'bar',
+    data: { labels: DK_DATA.canales.labels, datasets: DK_DATA.canales.datasets.map(ds => ({ label: ds.label, data: ds.data, backgroundColor: ds.color, borderRadius: 4 })) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8, font: { size: 11 } } }, tooltip: { callbacks: { label: (c) => ' ' + c.dataset.label + ': S/ ' + c.raw.toLocaleString() } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#F3F4F6' }, ticks: { callback: (v) => 'S/ ' + v.toLocaleString() } } } }
+  });
+
+  // Chart 4: Top 5 costos
+  const d4 = DK_DATA.topCostos.sort((a,b) => b.valor - a.valor);
+  dkCharts.c4 = new Chart(document.getElementById('dk-chart4'), {
+    type: 'bar',
+    data: { labels: d4.map(d => d.nombre), datasets: [{ label: 'Monto (S/)', data: d4.map(d => d.valor), backgroundColor: '#7C3AED', borderRadius: 6 }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => 'S/ ' + c.raw.toLocaleString() } } }, scales: { x: { grid: { color: '#F3F4F6' }, ticks: { callback: (v) => 'S/ ' + v.toLocaleString() } } } }
+  });
+
+  // Chart 5: Flujo de caja (líneas)
+  dkCharts.c5 = new Chart(document.getElementById('dk-chart5'), {
+    type: 'line',
+    data: { labels: DK_DATA.flujo.labels, datasets: [
+      { label: 'Flujo económico', data: DK_DATA.flujo.economico, borderColor: '#0891B2', backgroundColor: 'rgba(8,145,178,0.1)', borderWidth: 3, tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: '#0891B2' },
+      { label: 'Flujo financiero', data: DK_DATA.flujo.financiero, borderColor: '#7C3AED', backgroundColor: 'rgba(124,58,237,0.1)', borderWidth: 3, tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: '#7C3AED' }
+    ] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } }, tooltip: { callbacks: { label: (c) => ' ' + c.dataset.label + ': S/ ' + c.raw + ' mil' } } }, scales: { y: { grid: { color: '#F3F4F6' }, ticks: { callback: (v) => v + ' mil' } } } }
+  });
+
+  // Chart 6: Utilidad neta 5 años
+  dkCharts.c6 = new Chart(document.getElementById('dk-chart6'), {
+    type: 'bar',
+    data: { labels: DK_DATA.utilidadNeta5.labels, datasets: [{ label: 'Utilidad neta (S/)', data: DK_DATA.utilidadNeta5.data, backgroundColor: '#0E7B4F', borderRadius: 8 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => 'S/ ' + c.raw.toLocaleString() } } }, scales: { y: { grid: { color: '#F3F4F6' }, ticks: { callback: (v) => 'S/ ' + v.toLocaleString() } } } }
+  });
+}
+
+function dkFillLineasTable() {
+  const tbody = document.getElementById('dk-lineas-body');
+  if (!tbody) return;
+  let html = '', totalM = 0, totalA = 0;
+  DK_DATA.lineas.forEach(l => {
+    totalM += l.mensual; totalA += l.anual;
+    html += '<tr><td>' + l.nombre + '</td><td class="num">' + l.cant.toLocaleString() + '</td><td class="num">S/ ' + l.precio.toFixed(2) + '</td><td class="num">S/ ' + l.mensual.toLocaleString() + '</td><td class="num">S/ ' + l.anual.toLocaleString() + '</td><td class="num">' + l.pct + '%</td></tr>';
+  });
+  html += '<tr class="total-row"><td>TOTAL</td><td class="num">—</td><td class="num">—</td><td class="num">S/ ' + totalM.toLocaleString() + '</td><td class="num">S/ ' + totalA.toLocaleString() + '</td><td class="num">100%</td></tr>';
+  tbody.innerHTML = html;
+}
+
+function dkApplyFilters() {
+  const tipo = document.getElementById('dk-f-tipo').value;
+  const trim = document.getElementById('dk-f-trim').value;
+  const cat = document.getElementById('dk-f-cat').value;
+  let active = [];
+  if (tipo !== 'all') active.push(tipo);
+  if (trim !== 'all') active.push(trim);
+  if (cat !== 'all') active.push(cat);
+  document.getElementById('dk-rec-count').textContent = active.length > 0 ? (120 - active.length * 15) : 120;
+}
+
+function dkApplyScenario() {
+  const esc = document.getElementById('dk-f-esc').value;
+  const cfg = DK_DATA.escenarios[esc];
+  const newIng = Math.round(DK_DATA.ingresos * (1 + cfg.dV));
+  const newCostos = Math.round(DK_DATA.costos * (1 + cfg.dC));
+  const newGastos = Math.round((DK_DATA.gastosAdmin + DK_DATA.gastosVenta) * (1 + cfg.dG));
+  const newUtilOp = newIng - newCostos - newGastos;
+  const newImp = Math.max(0, newUtilOp) * 0.10;
+  const newUtilNeta = newUtilOp - newImp;
+  document.getElementById('dk-kpi-ing').textContent = 'S/ ' + newIng.toLocaleString();
+  document.getElementById('dk-kpi-costos').textContent = 'S/ ' + newCostos.toLocaleString();
+  document.getElementById('dk-kpi-gastos').textContent = 'S/ ' + newGastos.toLocaleString();
+  document.getElementById('dk-kpi-utilop').textContent = 'S/ ' + newUtilOp.toLocaleString();
+  document.getElementById('dk-kpi-margen').textContent = 'Margen: ' + (newUtilOp/newIng*100).toFixed(1) + '%';
+  document.getElementById('dk-kpi-utilneta').textContent = 'S/ ' + newUtilNeta.toLocaleString();
+  dkUpdateSemaphore(esc);
+}
+
+function dkUpdateSemaphore(esc) {
+  const sem3 = document.getElementById('dk-sem3');
+  const sem4 = document.getElementById('dk-sem4');
+  if (esc === 'optimista') {
+    sem3.classList.remove('bad'); sem3.querySelector('span').textContent = '> 1 - Cumple';
+    sem4.classList.remove('bad'); sem4.querySelector('span').textContent = '< 3 años - Cumple';
+  } else if (esc === 'pesimista') {
+    sem3.classList.add('bad'); sem3.querySelector('span').textContent = '< 1 - No cumple';
+    sem4.classList.add('bad'); sem4.querySelector('span').textContent = '> 5 años - No cumple';
+  } else {
+    sem3.classList.add('bad'); sem3.querySelector('span').textContent = '0.68 - No cumple';
+    sem4.classList.add('bad'); sem4.querySelector('span').textContent = '3.5 años - No cumple';
+  }
+}
+
+function dkClearFilters() {
+  document.getElementById('dk-f-tipo').value = 'all';
+  document.getElementById('dk-f-trim').value = 'all';
+  document.getElementById('dk-f-cat').value = 'all';
+  document.getElementById('dk-f-esc').value = 'base';
+  dkApplyFilters();
+  document.getElementById('dk-kpi-ing').textContent = 'S/ ' + DK_DATA.ingresos.toLocaleString();
+  document.getElementById('dk-kpi-costos').textContent = 'S/ ' + DK_DATA.costos.toLocaleString();
+  document.getElementById('dk-kpi-gastos').textContent = 'S/ ' + (DK_DATA.gastosAdmin + DK_DATA.gastosVenta).toLocaleString();
+  document.getElementById('dk-kpi-utilop').textContent = 'S/ ' + DK_DATA.utilidadOperativa.toLocaleString();
+  document.getElementById('dk-kpi-margen').textContent = 'Margen: ' + (DK_DATA.utilidadOperativa/DK_DATA.ingresos*100).toFixed(1) + '%';
+  document.getElementById('dk-kpi-utilneta').textContent = 'S/ ' + DK_DATA.utilidadNeta.toLocaleString();
+  dkUpdateSemaphore('base');
+}
+
+// Inicializar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { dkInitCharts(); dkFillLineasTable(); });
+} else {
+  dkInitCharts(); dkFillLineasTable();
+}
+</script>
+
 </body>
 </html>
